@@ -22,6 +22,6 @@ dependencies:
       - name: "{{ sansible_nexus_user }}"
         group: "{{ sansible_nexus_group }}"
 
-  - role: sansible.java
+  - role: java
     sansible_java_version: "{{ sansible_nexus_dependencies_java_version }}"
     when: sansible_nexus_dependencies_java_install == true
