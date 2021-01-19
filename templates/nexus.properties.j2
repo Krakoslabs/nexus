@@ -1,7 +1,3 @@
-#
-# {{ ansible_managed }}
-#
-
 # Jetty section
 application-host={{ sansible_nexus_host }}
 application-port={{ sansible_nexus_port }}
@@ -11,3 +7,4 @@ nexus-context-path={{ sansible_nexus_context_path }}
 nexus-edition={{ sansible_nexus_edition }}
 nexus-features=\
   {{ sansible_nexus_features }}
+nexus.scripts.allowCreation={{ sansible_nexus_configuration_enabled | bool }}

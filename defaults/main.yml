@@ -1,18 +1,17 @@
 ---
-
 sansible_nexus_context_path: /
 sansible_nexus_configuration_admin_password: pleasechangeme
 sansible_nexus_configuration_allow_anonymous: no
 sansible_nexus_configuration_base_url: ~
-sansible_nexus_configuration_default_admin_password: admin123
+# sansible_nexus_configuration_default_admin_password: admin123
 sansible_nexus_configuration_disk_free_space_limit: ~
 sansible_nexus_configuration_enabled: yes
 sansible_nexus_configuration_http_proxy_enabled: no
 sansible_nexus_configuration_http_proxy_host: ~
 sansible_nexus_configuration_http_proxy_port: 8080
-sansible_nexus_configuration_https_proxy_enabled: no
+sansible_nexus_configuration_https_proxy_enabled: false
 sansible_nexus_configuration_https_proxy_host: ~
-sansible_nexus_configuration_https_proxy_port: 8080
+sansible_nexus_configuration_https_proxy_port: 443
 sansible_nexus_configuration_no_proxy: ~
 sansible_nexus_configuration_realms: []
 # - name: GithubOauth

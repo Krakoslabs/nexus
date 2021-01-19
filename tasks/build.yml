@@ -1,5 +1,4 @@
 ---
-
 - name: Create Nexus directories
   become: yes
   file:
@@ -37,6 +36,7 @@
     dest: "{{ sansible_nexus_directory_home }}"
     src: "{{ sansible_nexus_directory_package }}/nexus-{{ sansible_nexus_version }}"
     state: link
+  notify: restart nexus
 
 - name: Add NEXUS_HOME for Nexus user
   become: yes
@@ -54,7 +54,7 @@
     create: yes
     dest: "{{ sansible_nexus_directory_home }}/bin/nexus.rc"
     insertafter: EOF
-    line: "run_as_user=\"{{ sansible_nexus_user }}\""
+    line: 'run_as_user="{{ sansible_nexus_user }}"'
     regexp: "^run_as_user"
 
 - name: Raise nofile limit for Nexus user

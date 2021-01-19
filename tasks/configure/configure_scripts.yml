@@ -1,10 +1,9 @@
 ---
-
 - name: Check if Nexus is a fresh install
   uri:
     force_basic_auth: yes
     method: GET
-    password: "{{ sansible_nexus_configuration_default_admin_password }}"
+    password: "{{ sansible_nexus_configuration_admin_password }}"
     status_code: 200,401
     user: admin
     url: "http://localhost:{{ sansible_nexus_port }}{{ sansible_nexus_context_path }}service/rest/v1/script/"
@@ -12,18 +11,29 @@
 
 - name: Set Nexus fresh install fact
   set_fact:
-    sansible_nexus_is_fresh_install: "{{ 'yes' if sansible_nexus_fresh_install_check.status == 200 else 'no' }}"
+    sansible_nexus_is_fresh_install: "{{ 'yes' if sansible_nexus_fresh_install_check.status == 401 else 'no' }}"
 
-- name: Update Nexus default admin password
-  import_tasks: groovy/execute.yml
-  vars:
-    admin_password: "{{ sansible_nexus_configuration_default_admin_password }}"
-    script_name: security_update_admin_password
-    script_path: security_update_admin_password
-    script_root_path: "{{ role_path }}/files"
-    args:
-      new_password: "{{ sansible_nexus_configuration_admin_password }}"
-  when: sansible_nexus_is_fresh_install == true
+- name: Block for nexus if fresh install
+  block:
+    - name: Get password for first installation
+      become: yes
+      shell: "cat {{ sansible_nexus_directory_data }}/admin.password"
+      register: password
+
+    - name: Set fact for default admin password
+      set_fact:
+        sansible_nexus_configuration_default_admin_password: "{{ password.stdout }}"
+
+    - name: Update Nexus default admin password
+      import_tasks: groovy/execute.yml
+      vars:
+        admin_password: "{{ sansible_nexus_configuration_default_admin_password }}"
+        script_name: security_update_admin_password
+        script_path: security_update_admin_password
+        script_root_path: "{{ role_path }}/files"
+        args:
+          new_password: "{{ sansible_nexus_configuration_admin_password }}"
+  when: sansible_nexus_is_fresh_install | bool
 
 - name: Set Nexus anonymous access
   import_tasks: groovy/execute.yml
